@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/game.js"></script>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center; /* center the cards horizontally */
+            align-items: center;     /* optional: center vertically if row height matters */
+        }
+        .card {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.1);
+            border-color: #888;
+        }
+        .card.selected {
+            background-color: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+        .card.invalid {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="timer">⏳ 60s</div>
+    <div class="progress"><div class="progress-bar" style="--progress:25%"></div></div>
+
+    <p>Select two PRIME numbers</p>
+
+    <!-- Card selection replaces inputs -->
+    <div class="card-container" id="cards"></div>
+
+    <!-- Hidden form to submit selected primes -->
+    <form method="post" id="primeForm">
+        <input type="hidden" name="p" id="hiddenP">
+        <input type="hidden" name="q" id="hiddenQ">
+        <br>
+        <button type="submit">UNLOCK</button>
+    </form>
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+</div>
+
+<script>
+    const cardContainer = document.getElementById('cards');
+    const form = document.getElementById('primeForm');
+    const hiddenP = document.getElementById('hiddenP');
+    const hiddenQ = document.getElementById('hiddenQ');
+    let selectedPrimes = [];
+
+    // Prime check
+    function isPrime(num) {
+        if (num < 2) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
+        }
+        return true;
+    }
+
+    // Generate numbers with some guaranteed primes
+    function generateNumbers() {
+        const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+        const numbers = [];
+    
+        // Ensure exactly 4 primes
+        for (let i = 0; i < 4; i++) {
+            numbers.push(primes[Math.floor(Math.random() * primes.length)]);
+        }
+    
+        // Fill remaining 6 with random non-primes between 2 and 99
+        while (numbers.length < 10) {
+            const rand = Math.floor(Math.random() * 98) + 2; // 2-99
+            if (!isPrime(rand)) {  // only add non-primes
+                numbers.push(rand);
+            }
+        }
+    
+        // Shuffle all 10 cards
+        for (let i = numbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+        }
+    
+        return numbers;
+    }
+    
+
+    const numbers = generateNumbers();
+
+    numbers.forEach(num => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.textContent = num;
+
+        card.addEventListener('click', () => {
+            if (selectedPrimes.length >= 2) return;
+            if (!isPrime(num)) {
+                card.classList.add('invalid');
+                return;
+            }
+            if (!card.classList.contains('selected')) {
+                card.classList.add('selected');
+                selectedPrimes.push(num);
+                if (selectedPrimes.length === 1) hiddenP.value = num;
+                else hiddenQ.value = num;
+            }
+        });
+
+        cardContainer.appendChild(card);
+    });
+</script>
+</body>
+</html>

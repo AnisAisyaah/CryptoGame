@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/game.js"></script>
+</head>
+<body>
+<div class="container">
+    <div id="timer">⏳ 60s</div>
+    <div class="progress"><div class="progress-bar" style="--progress:50%"></div></div>
+
+    <p>n = {{ n }}</p>
+    <p>φ(n) = {{ phi }}</p>
+
+    <form method="post">
+        <select name="e">
+            {% for e in valid_e %}
+            <option value="{{ e }}">{{ e }}</option>
+            {% endfor %}
+        </select><br>
+        <button>FORGE KEYS</button>
+    </form>
+</div>
+</body>
+</html>

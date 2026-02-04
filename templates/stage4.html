@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/game.js"></script>
+</head>
+<body>
+<div class="container">
+    <div id="timer">⏳ 60s</div>
+    <div class="progress"><div class="progress-bar" style="--progress:100%"></div></div>
+
+    <p>Encrypted: {{ encrypted }}</p>
+
+    <form method="post">
+        <input name="d" type="number" placeholder="Private key d" required><br>
+        <button>DECRYPT</button>
+    </form>
+
+    {% if success %}
+    <p class="success">🎉 {{ decrypted }}</p>
+    <p>⏱ {{ time_taken }} seconds</p>
+    <form method="post" action="/save_score">
+        <input name="name" placeholder="Your name" required>
+        <button>SUBMIT SCORE</button>
+    </form>
+    {% endif %}
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+</div>
+</body>
+</html>

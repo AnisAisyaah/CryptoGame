@@ -1,0 +1,113 @@
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+body {
+    background: radial-gradient(circle, #0f2027, #000);
+    color: #00ffcc;
+    font-family: "Courier New", monospace;
+    text-align: center;
+}
+
+.card {
+    color: #222; /* dark color for numbers */
+}
+
+
+
+.container {
+    width: 65%;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 15px;
+    box-shadow: 0 0 25px #00ffcc;
+}
+
+button {
+    padding: 12px 25px;
+    background: #00ffcc;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover { transform: scale(1.1); }
+
+input, select {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+#timer { font-size: 24px; color: #ffcc00; }
+
+.progress {
+    background: #222;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    height: 18px;
+    background: linear-gradient(90deg, #00ffcc, #00ffaa);
+    width: var(--progress);
+}
+
+/* Mascot */
+.mascot {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    animation: float 2s infinite;
+}
+
+.head {
+    width: 100px;
+    height: 100px;
+    background: #00ffcc;
+    border-radius: 50%;
+}
+
+.eye {
+    width: 10px;
+    height: 10px;
+    background: black;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.eye.left { left: 30px; top: 35px; }
+.eye.right { right: 30px; top: 35px; }
+
+.mouth {
+    width: 30px;
+    height: 5px;
+    background: black;
+    position: absolute;
+    bottom: 30px;
+    left: 35px;
+}
+
+/* Leaderboard */
+table {
+    margin: auto;
+    width: 70%;
+}
+
+tr {
+    animation: slideIn 0.6s ease forwards;
+}
+
+.success { color: #00ff99; font-size: 22px; }
+.error { color: red; }
