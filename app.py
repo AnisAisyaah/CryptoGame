@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 from rsa_utils import *  # Import RSA helper functions
 import json, time
 
@@ -46,7 +46,7 @@ def stage2():
         return redirect("/stage3")
     return render_template("stage2.html", n=n, phi=phi, valid_e=valid_e)
 
-# Stage 3: User enters a message to encrypt
+# Stage 3: User enters a plain text
 @app.route("/stage3", methods=["GET", "POST"])
 def stage3():
     if request.method == "POST":
@@ -56,14 +56,34 @@ def stage3():
         return redirect("/stage4")
     return render_template("stage3.html")
 
-# Stage 4: User must enter private key to decrypt
+# Stage 4: User guess number d to break the code
 @app.route("/stage4", methods=["GET", "POST"])
 def stage4():
     encrypted = session["encrypted"]
+    p = session["p"]
+    q = session["q"]
+    phi = (p - 1) * (q - 1)
+    e = session["e"]
+    d = session["d"]
+
+    # Calculate the correct k for hint range
+    k_correct = (d * e - 1) // phi
+
     if request.method == "POST":
-        d_input = int(request.form["d"])
-        if d_input == session["d"]:
-            decrypted = decrypt_message(encrypted, session["d"], session["n"])
+        try:
+            d_input = int(request.form["d"])
+        except (ValueError, TypeError):
+            return render_template(
+                "stage4.html",
+                encrypted=encrypted,
+                error="Invalid private key input!",
+                phi=phi,
+                e=e,
+                k_correct=k_correct
+            )
+
+        if d_input == d:
+            decrypted = decrypt_message(encrypted, d, session["n"])
             total_time = round(time.time() - session["start_time"], 2)
             session["final_time"] = total_time
             return render_template(
@@ -71,11 +91,29 @@ def stage4():
                 encrypted=encrypted,
                 success=True,
                 decrypted=decrypted,
-                time_taken=total_time
+                time_taken=total_time,
+                phi=phi,
+                e=e,
+                k_correct=k_correct
             )
         else:
-            return render_template("stage4.html", encrypted=encrypted, error="Wrong private key!")
-    return render_template("stage4.html", encrypted=encrypted)
+            return render_template(
+                "stage4.html",
+                encrypted=encrypted,
+                error="Wrong private key!",
+                phi=phi,
+                e=e,
+                k_correct=k_correct
+            )
+
+    return render_template(
+        "stage4.html",
+        encrypted=encrypted,
+        phi=phi,
+        e=e,
+        k_correct=k_correct
+    )
+
 
 # Save the player's score to the leaderboard
 @app.route("/save_score", methods=["POST"])

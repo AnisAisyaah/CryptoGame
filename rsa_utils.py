@@ -24,7 +24,10 @@ def mod_inverse(e, phi):
 
 # Encrypt a message string msg using public key (e, n)
 def encrypt_message(msg, e, n):
-    return [pow(ord(c), e, n) for c in msg]
+    # Using pow(a,b,c) means that the number of a will be powered with b that mod with c
+    # ord(c) means c alphabet tranform into numerical form of the alphabet ASCII code.
+    # This stage follows formula of C = M^e mod n, for encryption
+    return [pow(ord(c), e, n) for c in msg] 
 
 # Decrypt a list of numbers cipher using private key (d, n)
 def decrypt_message(cipher, d, n):

@@ -65,72 +65,87 @@
 </div>
 
 <script>
-    const cardContainer = document.getElementById('cards');
-    const form = document.getElementById('primeForm');
-    const hiddenP = document.getElementById('hiddenP');
-    const hiddenQ = document.getElementById('hiddenQ');
-    let selectedPrimes = [];
+   const cardContainer = document.getElementById('cards');
+const form = document.getElementById('primeForm');
+const hiddenP = document.getElementById('hiddenP');
+const hiddenQ = document.getElementById('hiddenQ');
+let selectedPrimes = [];
 
-    // Prime check
-    function isPrime(num) {
-        if (num < 2) return false;
-        for (let i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i === 0) return false;
-        }
-        return true;
+// Prime check function (unchanged)
+function isPrime(num) {
+    if (num < 2) return false;
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) return false;
+    }
+    return true;
+}
+
+// Generate numbers function (unchanged)
+function generateNumbers() {
+    const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+    const numbers = [];
+
+    // Ensure exactly 4 primes
+    for (let i = 0; i < 4; i++) {
+        numbers.push(primes[Math.floor(Math.random() * primes.length)]);
     }
 
-    // Generate numbers with some guaranteed primes
-    function generateNumbers() {
-        const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
-        const numbers = [];
-    
-        // Ensure exactly 4 primes
-        for (let i = 0; i < 4; i++) {
-            numbers.push(primes[Math.floor(Math.random() * primes.length)]);
+    // Fill remaining 6 with random non-primes between 2 and 99
+    while (numbers.length < 10) {
+        const rand = Math.floor(Math.random() * 98) + 2; // 2-99
+        if (!isPrime(rand)) {  // only add non-primes
+            numbers.push(rand);
         }
-    
-        // Fill remaining 6 with random non-primes between 2 and 99
-        while (numbers.length < 10) {
-            const rand = Math.floor(Math.random() * 98) + 2; // 2-99
-            if (!isPrime(rand)) {  // only add non-primes
-                numbers.push(rand);
-            }
-        }
-    
-        // Shuffle all 10 cards
-        for (let i = numbers.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-        }
-    
-        return numbers;
     }
-    
 
-    const numbers = generateNumbers();
+    // Shuffle all 10 cards
+    for (let i = numbers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    }
 
-    numbers.forEach(num => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.textContent = num;
+    return numbers;
+}
 
-        card.addEventListener('click', () => {
-            if (selectedPrimes.length >= 2) return;
-            if (!isPrime(num)) {
-                card.classList.add('invalid');
-                return;
-            }
-            if (!card.classList.contains('selected')) {
-                card.classList.add('selected');
-                selectedPrimes.push(num);
-                if (selectedPrimes.length === 1) hiddenP.value = num;
-                else hiddenQ.value = num;
-            }
-        });
+const numbers = generateNumbers();
 
-        cardContainer.appendChild(card);
+numbers.forEach(num => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.textContent = num;
+
+    card.addEventListener('click', () => {
+        if (selectedPrimes.length >= 2) {
+            alert("You already selected 2 primes!");
+            return;
+        }
+        if (!isPrime(num)) {
+            card.classList.add('invalid');
+            return;
+        }
+        if (selectedPrimes.includes(num)) {
+            alert("You already selected this prime number!");
+            return;
+        }
+        if (!card.classList.contains('selected')) {
+            card.classList.add('selected');
+            selectedPrimes.push(num);
+            if (selectedPrimes.length === 1) hiddenP.value = num;
+            else hiddenQ.value = num;
+        }
     });
+
+    cardContainer.appendChild(card);
+});
+
+// Optional: validate on form submission that 2 primes are selected
+form.addEventListener('submit', (e) => {
+    if (selectedPrimes.length !== 2) {
+        e.preventDefault();
+        alert("Please select exactly 2 different prime numbers before submitting.");
+    }
+});
+
 </script>
 </body>
 </html>

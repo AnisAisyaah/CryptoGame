@@ -2,6 +2,11 @@
 <html>
 <head>
     <link rel="stylesheet" href="/static/style.css">
+    <script>
+    const phi = {{ phi | safe }};
+    const e = {{ e | safe }};
+    const kCorrect = {{ k_correct | safe }};
+    </script>
     <script src="/static/game.js"></script>
 </head>
 <body>
@@ -10,6 +15,24 @@
     <div class="progress"><div class="progress-bar" style="--progress:100%"></div></div>
 
     <p>Encrypted: {{ encrypted }}</p>
+
+    <!-- ================= HINT BUTTON ================= -->
+    <button type="button" onclick="getHint()">💡 Try k Hint</button>
+
+    <div id="hintBox" style="display:none; border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>How to find d:</h4>
+        <p>d = (kφ(n)+1) ÷ e</p>
+
+        <div>
+            <label>Enter k: <input type="number" id="kInput" /></label>
+            <button type="button" onclick="tryK()">Try k</button>
+        </div>
+
+        <div id="hintSteps" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- =============================================== -->
+
 
     <form method="post">
         <input name="d" type="number" placeholder="Private key d" required><br>
