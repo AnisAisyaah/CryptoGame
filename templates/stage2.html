@@ -9,10 +9,11 @@
     <div id="timer">⏳ 60s</div>
     <div class="progress"><div class="progress-bar" style="--progress:50%"></div></div>
 
-    <p>n = {{ n }}</p>
-    <p>φ(n) = {{ phi }}</p>
+    <p>n = p*q = {{ n }}</p>
+    <p>φ(n) = (p-1)(q-1) = {{ phi }}</p>
 
     <form method="post">
+        Please pick any of e number:
         <select name="e">
             {% for e in valid_e %}
             <option value="{{ e }}">{{ e }}</option>
