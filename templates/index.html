@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>🍄 RSA GAMES: WHO IS D</title>
+    <title>RSA Quest</title>
     <link rel="stylesheet" href="/static/style.css">
-    <script src="/static/sound.js"></script>
 
     <style>
         .difficulty-container {
@@ -18,7 +16,7 @@
             width: 120px;
             height: 120px;
             border-radius: 12px;
-            border: 4px solid #b8603a;
+            border: 2px solid #ccc;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -27,93 +25,65 @@
             font-weight: bold;
             transition: all 0.3s ease;
             user-select: none;
-            background-color: #ffd7a1;
-            color: #2c1810;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            font-size: 10px;
+            background-color: #f8f8f8;
+            color: #000000;
         }
 
         .difficulty-card:hover {
-            transform: scale(1.08) translateY(-5px);
-            border-color: #e52521;
-            box-shadow: 0 8px 15px rgba(229, 37, 33, 0.4);
+            transform: scale(1.08);
+            border-color: #888;
         }
 
         .difficulty-card.selected {
-            background-color: #e52521;
+            background-color:rgb(175, 76, 173);
             color: white;
-            border-color: #ffd700;
-            box-shadow: 0 0 20px #ffd700;
+            border-color:rgb(175, 76, 158);
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>🍄 RSA GAMES 🍄</h1>
-        <p style="font-size: 14px; color: #FFD700;">Who is d? 🔍</p>
+<div class="container">
+    <h1>🔐 RSA QUEST</h1>
+    <p>Crack the encryption. Beat the clock.</p>
 
-        <div style="margin-bottom: 15px;">
-            <button id="muteBtn" onclick="toggleSound()"
-                style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #ffd700;">🔊</button>
-            <button id="musicBtn" onclick="toggleMusic()"
-                style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #00ff00; margin-left: 5px;">🎵</button>
-        </div>
+    <p><strong>Select Difficulty</strong></p>
 
-        <p><strong>⭐ SELECT YOUR WORLD ⭐</strong></p>
-
-        <div class="difficulty-container">
-            <div class="difficulty-card" data-level="easy">🟢 Easy</div>
-            <div class="difficulty-card" data-level="medium">🟡 Medium</div>
-            <div class="difficulty-card" data-level="hard">🔴 Hard</div>
-        </div>
-
-        <form action="/stage1" method="get" id="levelForm">
-            <input type="hidden" name="level" id="levelInput">
-            <br>
-            <button type="submit" onclick="localStorage.setItem('diamonds', 50)">🎮 LET'S-A-GO! 🎮</button>
-        </form>
-
-        <div
-            style="margin-top: 30px; padding: 15px; background: rgba(0, 0, 0, 0.6); border-top: 3px solid #ffd700; border-radius: 8px;">
-            <p style="font-size: 9px; color: #ffd700; margin: 0;">© 2026 RSA GAMES: WHO IS D | Created by Anis, Shaf &
-                Ainin</p>
-        </div>
+    <div class="difficulty-container">
+        <div class="difficulty-card" data-level="easy">Easy</div>
+        <div class="difficulty-card" data-level="medium">Medium</div>
+        <div class="difficulty-card" data-level="hard">Hard</div>
     </div>
 
-    <script>
-        const cards = document.querySelectorAll('.difficulty-card');
-        const levelInput = document.getElementById('levelInput');
-        const form = document.getElementById('levelForm');
+    <form action="/stage1" method="get" id="levelForm">
+        <input type="hidden" name="level" id="levelInput">
+        <br>
+        <button type="submit" onclick="localStorage.setItem('diamonds', 50)">START MISSION</button>
+    </form>
+</div>
 
-        let selectedLevel = null;
+<script>
+const cards = document.querySelectorAll('.difficulty-card');
+const levelInput = document.getElementById('levelInput');
+const form = document.getElementById('levelForm');
 
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                cards.forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                selectedLevel = card.dataset.level;
-                levelInput.value = selectedLevel;
-            });
-        });
+let selectedLevel = null;
 
-        form.addEventListener('submit', (e) => {
-            if (!selectedLevel) {
-                e.preventDefault();
-                alert("🍄 Please select a world first!");
-            }
-        });
+cards.forEach(card => {
+    card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedLevel = card.dataset.level;
+        levelInput.value = selectedLevel;
+    });
+});
 
-        function toggleSound() {
-            const isMuted = marioSound.toggleMute();
-            document.getElementById('muteBtn').textContent = isMuted ? '🔇' : '🔊';
-        }
-
-        function toggleMusic() {
-            const isPlaying = marioSound.toggleMusic();
-            document.getElementById('musicBtn').textContent = isPlaying ? '⏸' : '🎵';
-        }
-    </script>
+form.addEventListener('submit', (e) => {
+    if (!selectedLevel) {
+        e.preventDefault();
+        alert("Please select a difficulty level.");
+    }
+});
+</script>
 </body>
-
 </html>

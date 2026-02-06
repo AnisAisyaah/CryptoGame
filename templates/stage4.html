@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <script>
@@ -9,7 +8,6 @@
         const kCorrect = {{ k_correct | safe }};
     </script>
     <script src="/static/game.js"></script>
-    <script src="/static/sound.js"></script>
     <style>
         #diamonds {
             font-weight: bold;
@@ -28,81 +26,60 @@
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <!-- Timer and diamonds display -->
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div id="timer">⏰ 60s</div>
-            <div id="diamonds">🪙 50</div>
-            <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
-        </div>
-
-        <!-- Progress bar -->
-        <div class="progress">
-            <div class="progress-bar" style="--progress:100%"></div>
-        </div>
-
-        <div
-            style="background: rgba(255, 215, 0, 0.2); border: 3px solid #FFD700; border-radius: 12px; padding: 16px; margin: 20px auto; max-width: 600px;">
-            <h4 style="color: #E52521; margin: 8px 0; font-size: 16px;">🔓 Challenge 4: Decryption 🔓</h4>
-            <p style="font-size: 14px; margin: 10px 0; line-height: 1.6;">
-                Your encrypted message is displayed below.<br>
-                <strong>Find the private key (d)</strong> and enter it to decrypt!<br>
-                Use the hint if needed 🍄<br>
-                <em style="font-size: 12px;">Goal: Verify the decrypted message matches your original plaintext!</em>
-            </p>
-        </div>
-
-        <p>Encrypted: {{ encrypted }}</p>
-
-        <!-- ================= HINT BUTTON ================= -->
-        <button type="button" onclick="getHint()">🍄 HINT</button>
-
-        <div id="hintBox" style="border:1px solid #ccc; padding:10px; margin:10px;">
-            <h4>How to find d:</h4>
-            <p>d = (kφ(n)+1) ÷ e</p>
-
-            <div>
-                <label>Enter k: <input type="number" id="kInput" /></label>
-                <button type="button" onclick="tryK()">Try k</button>
-            </div>
-
-            <div id="hintSteps" style="margin-top:10px;"></div>
-        </div>
-        <!-- =============================================== -->
-
-        <form method="post" id="decryptForm">
-            <input name="d" type="number" placeholder="Enter private key (d)" required><br>
-            <button>DECRYPT</button>
-        </form>
-
-        {% if success %}
-        <script>marioSound.levelComplete();</script>
-        <p class="success">🎉 {{ decrypted }} 🎉</p>
-        <p>Level Cleared! Time: {{ time_taken }}s</p>
-        <form method="post" action="/save_score" id="saveScoreForm">
-            <input name="name" placeholder="Enter your name" required>
-            <input type="hidden" name="diamonds" id="diamondsInput">
-            <button type="submit">SAVE SCORE</button>
-        </form>
-        <script>
-            // Set diamonds value from localStorage
-            const currentDiamonds = localStorage.getItem("diamonds") || 50;
-            document.getElementById("diamondsInput").value = currentDiamonds;
-        </script>
-        {% endif %}
-
-        {% if error %}
-        <script>marioSound.error();</script>
-        <p class="error">{{ error }}</p>
-        {% endif %}
+<div class="container">
+    <!-- Timer and diamonds display -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="timer">⏳ 60s</div>
+        <div id="diamonds">💎 50</div>
+        <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
     </div>
 
-    <script>
-        // Removed leave-page warning entirely
-    </script>
+    <!-- Progress bar -->
+    <div class="progress">
+        <div class="progress-bar" style="--progress:100%"></div>
+    </div>
+
+    <p>Encrypted: {{ encrypted }}</p>
+
+    <!-- ================= HINT BUTTON ================= -->
+    <button type="button" onclick="getHint()">💡 Hint</button>
+
+    <div id="hintBox" style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>How to find d:</h4>
+        <p>d = (kφ(n)+1) ÷ e</p>
+
+        <div>
+            <label>Enter k: <input type="number" id="kInput" /></label>
+            <button type="button" onclick="tryK()">Try k</button>
+        </div>
+
+        <div id="hintSteps" style="margin-top:10px;"></div>
+    </div>
+    <!-- =============================================== -->
+
+    <form method="post" id="decryptForm">
+        <input name="d" type="number" placeholder="Private key d" required><br>
+        <button>DECRYPT</button>
+    </form>
+
+    {% if success %}
+        <p class="success">🎉 {{ decrypted }}</p>
+        <p>⏱ {{ time_taken }} seconds</p>
+        <form method="post" action="/save_score">
+            <input name="name" placeholder="Your name" required>
+            <button>SUBMIT SCORE</button>
+        </form>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</div>
+
+<script>
+    // Removed leave-page warning entirely
+</script>
 
 </body>
-
 </html>

@@ -1,457 +1,113 @@
-/* Google Font for authentic Super Mario */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-/* Animations */
 @keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-@keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-15px);
-    }
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes shake {
-
-    0%,
-    100% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-8px);
-    }
-
-    75% {
-        transform: translateX(8px);
-    }
-}
-
-@keyframes cloudFloat {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-100px);
-    }
-}
-
-/* Body - Mario Sky World */
 body {
-    background: linear-gradient(to bottom, #5C94FC 0%, #5C94FC 75%, #7ED321 75%, #7ED321 100%);
-    color: #fff;
-    font-family: 'Press Start 2P', 'Courier New', monospace;
+    background: radial-gradient(circle, #570d5b, #201a1a);
+    color: #f4b6d8;
+    font-family: "Courier New", monospace;
     text-align: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    position: relative;
 }
 
-/* Add clouds */
-body::before {
-    content: '';
-    position: fixed;
-    top: 10%;
-    left: 10%;
-    width: 120px;
-    height: 40px;
-    background: #fff;
-    border-radius: 50px;
-    opacity: 0.9;
-    animation: cloudFloat 20s linear infinite;
+.card {
+    color: #222; /* dark color for numbers */
 }
 
-body::after {
-    content: '';
-    position: fixed;
-    top: 20%;
-    right: 20%;
-    width: 100px;
-    height: 35px;
-    background: #fff;
-    border-radius: 50px;
-    opacity: 0.8;
-}
 
-* {
-    box-sizing: border-box;
-}
 
-/* Mario World Container - No boxes! */
 .container {
-    width: 100%;
-    max-width: 900px;
-    margin: 60px auto 0;
-    padding: 40px 30px 120px;
-    background: transparent;
-    border: none;
-    position: relative;
-    animation: slideIn 0.5s ease;
-}
-
-/* Add ground blocks at bottom */
-.container::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background:
-        repeating-linear-gradient(90deg,
-            #C84C0C 0px,
-            #C84C0C 40px,
-            #DC5C0C 40px,
-            #DC5C0C 42px,
-            #C84C0C 42px,
-            #C84C0C 80px),
-        repeating-linear-gradient(0deg,
-            #C84C0C 0px,
-            #C84C0C 40px,
-            #DC5C0C 40px,
-            #DC5C0C 42px,
-            #C84C0C 42px,
-            #C84C0C 80px);
-    border-top: 4px solid #9C3C0C;
-}
-
-/* Buttons - Mario Fire Flower Power-Up (STATIC) */
-button {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #E52521 0%, #FF6B6B 50%, #E52521 100%);
-    border: 4px solid #fff;
-    font-size: 9px;
-    font-family: 'Press Start 2P', monospace;
-    font-weight: 400;
-    border-radius: 8px;
-    cursor: pointer;
-    color: #fff;
-    transition: all 0.2s ease;
-    box-shadow: 0 6px 0 #8B1A17, 0 8px 15px rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-    margin: 8px 5px;
-    letter-spacing: 1px;
-    position: relative;
-}
-
-button:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 0 #8B1A17, 0 12px 20px rgba(0, 0, 0, 0.4);
-    background: linear-gradient(135deg, #FF3B30 0%, #FF8787 50%, #FF3B30 100%);
-}
-
-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #8B1A17;
-}
-
-/* Inputs - Coin Collection Box (STATIC) */
-input,
-select {
-    padding: 10px 14px;
-    margin: 10px 5px;
-    border-radius: 8px;
-    border: 4px solid #FFD700;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-    background: linear-gradient(135deg, #FFFACD 0%, #FFD700 100%);
-    color: #8B4513;
-    transition: all 0.3s ease;
-    min-width: 200px;
-    box-shadow: 0 4px 0 #DAA520, 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #FFA500;
-    background: linear-gradient(135deg, #FFFFE0 0%, #FFD700 100%);
-    box-shadow: 0 6px 0 #DAA520, 0 0 20px rgba(255, 215, 0, 0.5);
-    transform: translateY(-3px);
-}
-
-/* Timer - STATIC (NO ANIMATION) */
-#timer {
-    font-size: 12px;
-    color: #fff;
-    font-weight: 400;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #E52521 0%, #FF6B6B 100%);
-    border-radius: 20px;
-    display: inline-block;
-    margin: 8px;
-    border: 4px solid #fff;
-    box-shadow: 0 5px 0 #8B1A17, 0 7px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Diamonds - Coin Display (STATIC - NO ANIMATION) */
-#diamonds {
-    font-weight: 400;
-    font-size: 12px;
-    color: #fff;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    border-radius: 20px;
-    display: inline-block;
-    margin: 8px;
-    border: 4px solid #fff;
-    box-shadow: 0 5px 0 #DAA520, 0 7px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Progress bar - Mario Level Progress */
-.progress-container,
-.progress {
-    width: 100%;
-    max-width: 600px;
-    height: 28px;
-    background: #2C3E2C;
+    width: 65%;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(0,0,0,0.7);
     border-radius: 15px;
-    margin: 25px auto;
+    box-shadow: 0 0 25px #ec3ac2;
+}
+
+button {
+    padding: 12px 25px;
+    background: #c194ff;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover { transform: scale(1.1); }
+
+input, select {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+#timer { font-size: 24px; color: #ffcc00; }
+
+.progress {
+    background: #222;
+    border-radius: 20px;
     overflow: hidden;
-    border: 4px solid #1B5E20;
-    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5), 0 4px 0 #1B5E20;
-    position: relative;
+    margin: 20px 0;
 }
 
 .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #7ED321 0%, #4CAF50 50%, #00C853 100%);
-    width: var(--progress, 0%);
-    transition: width 0.5s ease;
-    border-radius: 11px;
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
-    position: relative;
+    height: 18px;
+    background: linear-gradient(90deg, #00ffcc, #00ffaa);
+    width: var(--progress);
 }
 
-/* Cards - Mario Question Blocks & Bricks */
-.card {
-    display: inline-block;
-    padding: 16px 22px;
-    font-size: 14px;
-    background:
-        linear-gradient(135deg, #F4C542 0%, #E8A630 50%, #F4C542 100%),
-        repeating-linear-gradient(90deg, transparent 0px, transparent 15px, rgba(0, 0, 0, 0.1) 15px, rgba(0, 0, 0, 0.1) 17px);
-    border: 4px solid #C68400;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin: 10px;
-    font-weight: 400;
-    color: #2d3748;
-    box-shadow:
-        0 6px 0 #9B6700,
-        inset 0 -4px 0 rgba(0, 0, 0, 0.2),
-        inset 0 4px 0 rgba(255, 255, 255, 0.3),
-        0 8px 15px rgba(0, 0, 0, 0.2);
-    position: relative;
-    image-rendering: pixelated;
+/* Mascot */
+.mascot {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    animation: float 2s infinite;
 }
 
-.card::before {
-    content: '?';
+.head {
+    width: 100px;
+    height: 100px;
+    background: #00ffcc;
+    border-radius: 50%;
+}
+
+.eye {
+    width: 10px;
+    height: 10px;
+    background: black;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.3);
-    font-weight: bold;
+    border-radius: 50%;
 }
 
-.card:hover {
-    transform: translateY(-8px) scale(1.08);
-    box-shadow:
-        0 10px 0 #9B6700,
-        inset 0 -4px 0 rgba(0, 0, 0, 0.2),
-        inset 0 4px 0 rgba(255, 255, 255, 0.4),
-        0 12px 20px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #FFD54F 0%, #F4C542 50%, #FFD54F 100%);
+.eye.left { left: 30px; top: 35px; }
+.eye.right { right: 30px; top: 35px; }
+
+.mouth {
+    width: 30px;
+    height: 5px;
+    background: black;
+    position: absolute;
+    bottom: 30px;
+    left: 35px;
 }
 
-.card.selected {
-    background: linear-gradient(135deg, #66BB6A 0%, #43A047 50%, #66BB6A 100%);
-    border-color: #2E7D32;
-    color: white;
-    box-shadow:
-        0 6px 0 #1B5E20,
-        inset 0 -4px 0 rgba(0, 0, 0, 0.3),
-        inset 0 4px 0 rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(76, 175, 80, 0.6);
-}
-
-.card.selected::before {
-    content: '✓';
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.card.invalid {
-    background: linear-gradient(135deg, #E53935 0%, #C62828 50%, #E53935 100%);
-    border-color: #B71C1C;
-    color: white;
-    animation: shake 0.3s ease;
-    box-shadow:
-        0 6px 0 #8B1A17,
-        inset 0 -4px 0 rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(229, 57, 53, 0.6);
-}
-
-.card.invalid::before {
-    content: '✕';
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* Headings - Mario Title Style (STATIC - NO ANIMATION) */
-h1 {
-    font-size: 24px;
-    color: #fff;
-    text-shadow:
-        4px 4px 0 #E52521,
-        6px 6px 0 #FFD700,
-        2px 2px 10px rgba(0, 0, 0, 0.5);
-    margin: 15px 0 20px 0;
-    line-height: 1.6;
-    font-weight: 400;
-}
-
-h4 {
-    color: #fff;
-    margin: 12px 0;
-    font-weight: 400;
-    font-size: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Paragraphs */
-p {
-    font-size: 10px;
-    line-height: 1.7;
-    color: #fff;
-    margin: 12px 0;
-    font-weight: 400;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-/* Subtitle emphasis for "Who is d?" */
-p strong {
-    font-size: 14px;
-    color: #FFD700;
-}
-
-/* Success - Star Power (STATIC) */
-.success {
-    color: #fff;
-    font-size: 10px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    padding: 12px;
-    border-radius: 12px;
-    border: 4px solid #fff;
-    margin: 15px 0;
-    font-weight: 400;
-    box-shadow: 0 6px 0 #DAA520, 0 8px 20px rgba(255, 215, 0, 0.5);
-}
-
-/* Error - Game Over (STATIC WITH SHAKE) */
-.error {
-    color: #fff;
-    font-size: 9px;
-    background: linear-gradient(135deg, #E52521 0%, #C41E1C 100%);
-    border: 4px solid #fff;
-    padding: 10px;
-    border-radius: 12px;
-    margin: 12px 0;
-    font-weight: 400;
-    box-shadow: 0 6px 0 #8B1A17, 0 8px 20px rgba(229, 37, 33, 0.5);
-    animation: shake 0.5s ease;
-}
-
-/* Card container */
-.card-container {
-    margin: 20px 0;
-}
-
-/* Links */
-a {
-    color: #FFD700;
-    text-decoration: none;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-a:hover {
-    color: #FFA500;
-    text-decoration: underline;
-}
-
-/* Leaderboard and Tables */
+/* Leaderboard */
 table {
-    width: 100%;
-    color: #fff;
-    font-size: 10px;
-    border-collapse: collapse;
-    margin: 20px 0;
+    margin: auto;
+    width: 70%;
 }
 
-th {
-    background: linear-gradient(135deg, #E52521 0%, #C41E1C 100%);
-    padding: 10px;
-    text-align: center;
-    border: 3px solid #fff;
-    font-weight: 400;
+tr {
+    animation: slideIn 0.6s ease forwards;
 }
 
-td {
-    padding: 8px;
-    text-align: center;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-tr:hover td {
-    background: rgba(255, 215, 0, 0.2);
-}
-
-.leaderboard {
-    background: rgba(255, 255, 255, 0.1);
-    border: 4px solid #fff;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-.leaderboard h2 {
-    color: #FFD700;
-    font-size: 14px;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
+.success { color: #00ff99; font-size: 22px; }
+.error { color: red; }
