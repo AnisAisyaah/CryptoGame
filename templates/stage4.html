@@ -8,6 +8,23 @@
         const kCorrect = {{ k_correct | safe }};
     </script>
     <script src="/static/game.js"></script>
+    <style>
+        #diamonds {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        button#homeBtn {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .progress {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -15,6 +32,7 @@
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <div id="timer">⏳ 60s</div>
         <div id="diamonds">💎 50</div>
+        <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
     </div>
 
     <!-- Progress bar -->

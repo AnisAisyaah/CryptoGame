@@ -41,7 +41,7 @@
 </div>
 
 <script>
-const WRONG_PRIME_PENALTY = 3;
+const WRONG_PRIME_PENALTY = 15;
 const cardContainer = document.getElementById('cards');
 const hiddenP = document.getElementById('hiddenP');
 const hiddenQ = document.getElementById('hiddenQ');
@@ -61,7 +61,7 @@ function isPrime(num) {
 }
 
 const primePools = {
-    easy: [2,3,5,7,11,13,17,19,23,29],
+    easy: [7,17,19,23,29],
     medium: [31,37,41,43,47,53,59,61,67,71,73,79,83,89,97],
     hard: [101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251]
 };
@@ -70,8 +70,19 @@ function generateNumbers(level) {
     const numbers = [];
     const primes = primePools[level];
     let min,max;
-    if(level==='easy'){min=2;max=30}else if(level==='medium'){min=30;max=100}else{min=100;max=300;}
-    while(numbers.length<2){const p=primes[Math.floor(Math.random()*primes.length)];if(!numbers.includes(p))numbers.push(p);}
+    if(level==='easy')
+        {
+            min=7;max=30
+        }
+    else if(level==='medium')
+        {
+            min=30;max=100
+        }else
+        {
+            min=100;max=300;
+        }
+    while(numbers.length<2)
+    {const p=primes[Math.floor(Math.random()*primes.length)];if(!numbers.includes(p))numbers.push(p);}
     while(numbers.length<10){const rand=Math.floor(Math.random()*(max-min+1))+min;if(!isPrime(rand)&&!numbers.includes(rand))numbers.push(rand);}
     for(let i=numbers.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[numbers[i],numbers[j]]=[numbers[j],numbers[i]];}
     return numbers;

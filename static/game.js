@@ -59,22 +59,36 @@ function startTimer() {
 
 // ================= HINT FUNCTION =================
 function getHint() {
-    if (!hintUsed) {
-        timeLeft -= 5;
-        hintUsed = true;
-        if (timeLeft < 0) timeLeft = 0;
-        alert("⏱ Hint used! -5 seconds penalty.");
+    // Only allow hint once
+    if (hintUsed) {
+        alert("💡 Hint already used!");
+        return;
     }
 
+    // Ask the user if they really want to use the hint
+    const useHint = confirm("Do you want to use a hint? This will deduct 40 seconds.");
+    if (!useHint) return; // User declined, do nothing
+
+    // Deduct penalty and mark hint as used
+    timeLeft -= 40;
+    if (timeLeft < 0) timeLeft = 0;
+    hintUsed = true;
+
+    alert("⏱ Hint used! -40 seconds penalty.");
+
+    // Show hint box
     const box = document.getElementById("hintBox");
     const stepsDiv = document.getElementById("hintSteps");
-    if(box) box.style.display = "block";
+    if (box) box.style.display = "block";
 
+    // Show hint range
     const lower = Math.max(1, kCorrect - 2);
     const upper = kCorrect + 2;
-
-    if(stepsDiv) stepsDiv.innerHTML = `<p>💡 Hint: The correct k is between <b>${lower}</b> and <b>${upper}</b>.</p>`;
+    if (stepsDiv) {
+        stepsDiv.innerHTML = `<p>💡 Hint: The correct k is between <b>${lower}</b> and <b>${upper}</b>.</p>`;
+    }
 }
+
 
 // ================= TRY K FUNCTION =================
 function tryK() {
