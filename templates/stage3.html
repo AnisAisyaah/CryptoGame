@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/game.js"></script>
+    <script src="/static/sound.js"></script>
     <style>
         #diamonds {
             font-weight: bold;
@@ -21,41 +23,55 @@
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <!-- Timer and diamonds display -->
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div id="timer">⏳ 60s</div>
-        <div id="diamonds">💎 50</div>
-        <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
+    <div class="container">
+        <!-- Timer and diamonds display -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div id="timer">⏰ 60s</div>
+            <div id="diamonds">🪙 50</div>
+            <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="--progress:75%"></div>
+        </div>
+
+        <div
+            style="background: rgba(229, 37, 33, 0.1); border: 3px solid #E52521; border-radius: 12px; padding: 16px; margin: 20px auto; max-width: 600px;">
+            <h4 style="color: #E52521; margin: 8px 0; font-size: 16px;">🔒 Challenge 3: Encryption 🔒</h4>
+            <p style="font-size: 14px; margin: 10px 0; line-height: 1.6;">
+                Enter your <strong>plaintext message</strong> below.<br>
+                The game will:<br>
+                • Convert text to ASCII numerical values<br>
+                • Encrypt using public key (n, e)<br>
+                • Display the encrypted message
+            </p>
+        </div>
+
+        <!-- Stage 3 form -->
+        <form method="post" id="encryptForm">
+            <input name="message" placeholder="Enter secret message" required><br>
+            <button type="submit">ENCRYPT!</button>
+        </form>
     </div>
 
-    <div class="progress">
-        <div class="progress-bar" style="--progress:75%"></div>
-    </div>
+    <script>
+        /* ---------------- Leave confirmation ---------------- */
+        let allowLeave = false;
+        const form = document.getElementById('encryptForm');
 
-    <!-- Stage 3 form -->
-    <form method="post" id="encryptForm">
-        <input name="message" placeholder="Secret Message" required><br>
-        <button type="submit">ENCRYPT</button>
-    </form>
-</div>
+        form.addEventListener('submit', () => {
+            allowLeave = true; // allow form submission without confirmation
+        });
 
-<script>
-/* ---------------- Leave confirmation ---------------- */
-let allowLeave = false;
-const form = document.getElementById('encryptForm');
-
-form.addEventListener('submit', () => {
-    allowLeave = true; // allow form submission without confirmation
-});
-
-window.onbeforeunload = function() {
-    if (!allowLeave) {
-        return "Are you sure you want to leave? Diamonds will reset!";
-    }
-};
-</script>
+        window.onbeforeunload = function () {
+            if (!allowLeave) {
+                return "🍄 Are you sure? Your coins will reset!";
+            }
+        };
+    </script>
 
 </body>
+
 </html>
