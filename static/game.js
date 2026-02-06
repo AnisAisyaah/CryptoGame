@@ -1,12 +1,39 @@
 let timeLeft = 60;
 let hintUsed = false;   // Track hint usage
 
+// ====== DIAMONDS SYSTEM ======
+let diamonds = parseInt(localStorage.getItem("diamonds")) || 50;
 
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('new_game') === '1') {
+    diamonds = 50;
+    localStorage.setItem("diamonds", diamonds);
+}
 
+function updateDiamondUI() {
+    const diamondBox = document.getElementById("diamonds");
+    if (diamondBox) diamondBox.innerText = `💎 ${diamonds}`;
+}
+
+function deductDiamonds(amount) {
+    diamonds -= amount;
+    if (diamonds < 0) diamonds = 0;
+    localStorage.setItem("diamonds", diamonds);
+    updateDiamondUI();
+
+    if (diamonds <= 0) {
+        alert("💀 GAME OVER! You ran out of diamonds.");
+        localStorage.removeItem("diamonds");
+        window.location.href = "/"; // redirect to homepage
+    }
+}
+
+// ====== TIMER ======
 function startTimer() {
     const timer = document.getElementById("timer");
-
     if (!timer) return;
+
+    updateDiamondUI();
 
     const interval = setInterval(() => {
         timeLeft--;
@@ -14,42 +41,42 @@ function startTimer() {
 
         if (timeLeft <= 10) {
             timer.style.color = "#ff4444";
+        } else {
+            timer.style.color = "";
         }
 
         if (timeLeft <= 0) {
             clearInterval(interval);
-            alert("💥 SYSTEM LOCKED! Time expired.");
-            window.location.href = "/";
+            alert(`⏱ Time expired! -10 diamonds`);
+            deductDiamonds(10);
+            if (diamonds > 0) {
+                timeLeft = 60; // restart stage
+                startTimer();
+            }
         }
     }, 1000);
 }
 
 // ================= HINT FUNCTION =================
-// Changed: now user inputs k, JS calculates d and shows result
 function getHint() {
-    // Penalty only once
     if (!hintUsed) {
-        timeLeft -= 5;   // -5 seconds
+        timeLeft -= 5;
         hintUsed = true;
-
         if (timeLeft < 0) timeLeft = 0;
-
         alert("⏱ Hint used! -5 seconds penalty.");
     }
 
     const box = document.getElementById("hintBox");
     const stepsDiv = document.getElementById("hintSteps");
-    box.style.display = "block";
+    if(box) box.style.display = "block";
 
-    // Show range around the correct k:
     const lower = Math.max(1, kCorrect - 2);
     const upper = kCorrect + 2;
 
-    stepsDiv.innerHTML = `<p>💡 Hint: The correct k is between <b>${lower}</b> and <b>${upper}</b>.</p>`;
+    if(stepsDiv) stepsDiv.innerHTML = `<p>💡 Hint: The correct k is between <b>${lower}</b> and <b>${upper}</b>.</p>`;
 }
 
-// k try function remains the same, using phi and e global constants
-
+// ================= TRY K FUNCTION =================
 function tryK() {
     const kInput = document.getElementById("kInput");
     const k = parseInt(kInput.value);
@@ -67,14 +94,21 @@ function tryK() {
 
     if (Number.isInteger(d)) {
         text += " ✅ ← d found!";
-        stepsDiv.innerHTML = `<p style="color:green; font-weight:bold;">${text}</p>`;
-        // Auto-fill the d input box with found d
+        if(stepsDiv) stepsDiv.innerHTML = `<p style="color:green; font-weight:bold;">${text}</p>`;
         document.querySelector('input[name="d"]').value = d;
     } else {
         text += " ❌ Not an integer, try another k.";
-        stepsDiv.innerHTML = `<p>${text}</p>`;
+        if(stepsDiv) stepsDiv.innerHTML = `<p>${text}</p>`;
     }
 }
 
+// ====== CONFIRM BACK TO HOMEPAGE ======
+function confirmBackToHome(url = "/") {
+    const confirmRestart = confirm("⚠️ Are you sure you want to restart?");
+    if (confirmRestart) {
+        localStorage.setItem("diamonds", 50);
+        window.location.href = url;
+    }
+}
 
 window.onload = startTimer;

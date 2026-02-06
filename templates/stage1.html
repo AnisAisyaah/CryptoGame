@@ -3,57 +3,33 @@
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/game.js"></script>
+
     <style>
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center; /* center the cards horizontally */
-            align-items: center;     /* optional: center vertically if row height matters */
-        }
-        .card {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            user-select: none;
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: scale(1.1);
-            border-color: #888;
-        }
-        .card.selected {
-            background-color: #4caf50;
-            color: white;
-            border-color: #4caf50;
-        }
-        .card.invalid {
-            background-color: #f44336;
-            color: white;
-            border-color: #f44336;
-            cursor: not-allowed;
-        }
+        .card-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center; align-items: center; }
+        .card { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background-color: #f0f0f0; border: 2px solid #ccc; border-radius: 8px; cursor: pointer; font-weight: bold; user-select: none; transition: all 0.3s ease; }
+        .card:hover { transform: scale(1.1); border-color: #888; }
+        .card.selected { background-color: #4caf50; color: white; border-color: #4caf50; }
+        .card.invalid { background-color: #f44336; color: white; border-color: #f44336; cursor: not-allowed; }
+        #diamonds { font-weight: bold; font-size: 18px; }
     </style>
 </head>
+
 <body>
 <div class="container">
-    <div id="timer">⏳ 60s</div>
-    <div class="progress"><div class="progress-bar" style="--progress:25%"></div></div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="timer">⏳ 60s</div>
+        <div id="diamonds">💎 50</div>
+        <button onclick="confirmBackToHome()">Restart</button>
+    </div>
 
-    <p>Select two PRIME numbers</p>
+    <div class="progress">
+        <div class="progress-bar" style="--progress:25%"></div>
+    </div>
 
-    <!-- Card selection replaces inputs -->
+    <p>Select exactly <strong>two PRIME numbers</strong></p>
+
     <div class="card-container" id="cards"></div>
 
-    <!-- Hidden form to submit selected primes -->
     <form method="post" id="primeForm">
         <input type="hidden" name="p" id="hiddenP">
         <input type="hidden" name="q" id="hiddenQ">
@@ -65,87 +41,62 @@
 </div>
 
 <script>
-   const cardContainer = document.getElementById('cards');
-const form = document.getElementById('primeForm');
+const WRONG_PRIME_PENALTY = 3;
+const cardContainer = document.getElementById('cards');
 const hiddenP = document.getElementById('hiddenP');
 const hiddenQ = document.getElementById('hiddenQ');
+const form = document.getElementById('primeForm');
+
 let selectedPrimes = [];
 
-// Prime check function (unchanged)
+function getDifficultyFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('level') || 'easy';
+}
+
 function isPrime(num) {
     if (num < 2) return false;
-    for (let i = 2; i <= Math.sqrt(num); i++) {
-        if (num % i === 0) return false;
-    }
+    for (let i = 2; i <= Math.sqrt(num); i++) if (num % i === 0) return false;
     return true;
 }
 
-// Generate numbers function (unchanged)
-function generateNumbers() {
-    const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+const primePools = {
+    easy: [2,3,5,7,11,13,17,19,23,29],
+    medium: [31,37,41,43,47,53,59,61,67,71,73,79,83,89,97],
+    hard: [101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251]
+};
+
+function generateNumbers(level) {
     const numbers = [];
-
-    // Ensure exactly 4 primes
-    for (let i = 0; i < 4; i++) {
-        numbers.push(primes[Math.floor(Math.random() * primes.length)]);
-    }
-
-    // Fill remaining 6 with random non-primes between 2 and 99
-    while (numbers.length < 10) {
-        const rand = Math.floor(Math.random() * 98) + 2; // 2-99
-        if (!isPrime(rand)) {  // only add non-primes
-            numbers.push(rand);
-        }
-    }
-
-    // Shuffle all 10 cards
-    for (let i = numbers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-    }
-
+    const primes = primePools[level];
+    let min,max;
+    if(level==='easy'){min=2;max=30}else if(level==='medium'){min=30;max=100}else{min=100;max=300;}
+    while(numbers.length<2){const p=primes[Math.floor(Math.random()*primes.length)];if(!numbers.includes(p))numbers.push(p);}
+    while(numbers.length<10){const rand=Math.floor(Math.random()*(max-min+1))+min;if(!isPrime(rand)&&!numbers.includes(rand))numbers.push(rand);}
+    for(let i=numbers.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[numbers[i],numbers[j]]=[numbers[j],numbers[i]];}
     return numbers;
 }
 
-const numbers = generateNumbers();
+function renderCards() {
+    cardContainer.innerHTML=''; selectedPrimes=[]; hiddenP.value=''; hiddenQ.value='';
+    const level=getDifficultyFromURL(); const numbers=generateNumbers(level);
 
-numbers.forEach(num => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.textContent = num;
-
-    card.addEventListener('click', () => {
-        if (selectedPrimes.length >= 2) {
-            alert("You already selected 2 primes!");
-            return;
-        }
-        if (!isPrime(num)) {
-            card.classList.add('invalid');
-            return;
-        }
-        if (selectedPrimes.includes(num)) {
-            alert("You already selected this prime number!");
-            return;
-        }
-        if (!card.classList.contains('selected')) {
-            card.classList.add('selected');
-            selectedPrimes.push(num);
-            if (selectedPrimes.length === 1) hiddenP.value = num;
-            else hiddenQ.value = num;
-        }
+    numbers.forEach(num=>{
+        const card=document.createElement('div'); card.className='card'; card.textContent=num;
+        card.addEventListener('click',()=>{
+            if(selectedPrimes.length>=2) return;
+            if(!isPrime(num)){card.classList.add('invalid'); timeLeft-=WRONG_PRIME_PENALTY;if(timeLeft<0)timeLeft=0;updateDiamondUI();alert(`❌ Not a prime! -${WRONG_PRIME_PENALTY}s`); return;}
+            if(!card.classList.contains('selected')){card.classList.add('selected'); selectedPrimes.push(num); if(selectedPrimes.length===1) hiddenP.value=num; else hiddenQ.value=num;}
+        });
+        cardContainer.appendChild(card);
     });
+}
 
-    cardContainer.appendChild(card);
+form.addEventListener('submit', (e)=>{
+    if(selectedPrimes.length!==2){e.preventDefault();alert("Please select exactly 2 prime numbers.");}
 });
 
-// Optional: validate on form submission that 2 primes are selected
-form.addEventListener('submit', (e) => {
-    if (selectedPrimes.length !== 2) {
-        e.preventDefault();
-        alert("Please select exactly 2 different prime numbers before submitting.");
-    }
-});
-
+renderCards();
 </script>
 </body>
 </html>

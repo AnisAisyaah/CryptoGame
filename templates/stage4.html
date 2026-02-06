@@ -3,23 +3,31 @@
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <script>
-    const phi = {{ phi | safe }};
-    const e = {{ e | safe }};
-    const kCorrect = {{ k_correct | safe }};
+        const phi = {{ phi | safe }};
+        const e = {{ e | safe }};
+        const kCorrect = {{ k_correct | safe }};
     </script>
     <script src="/static/game.js"></script>
 </head>
 <body>
 <div class="container">
-    <div id="timer">⏳ 60s</div>
-    <div class="progress"><div class="progress-bar" style="--progress:100%"></div></div>
+    <!-- Timer and diamonds display -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="timer">⏳ 60s</div>
+        <div id="diamonds">💎 50</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress">
+        <div class="progress-bar" style="--progress:100%"></div>
+    </div>
 
     <p>Encrypted: {{ encrypted }}</p>
 
     <!-- ================= HINT BUTTON ================= -->
-    <button type="button" onclick="getHint()">💡 Try k Hint</button>
+    <button type="button" onclick="getHint()">💡 Hint</button>
 
-    <div id="hintBox" style="display:none; border:1px solid #ccc; padding:10px; margin:10px;">
+    <div id="hintBox" style="border:1px solid #ccc; padding:10px; margin:10px;">
         <h4>How to find d:</h4>
         <p>d = (kφ(n)+1) ÷ e</p>
 
@@ -30,25 +38,30 @@
 
         <div id="hintSteps" style="margin-top:10px;"></div>
     </div>
-
     <!-- =============================================== -->
 
-
-    <form method="post">
+    <form method="post" id="decryptForm">
         <input name="d" type="number" placeholder="Private key d" required><br>
         <button>DECRYPT</button>
     </form>
 
     {% if success %}
-    <p class="success">🎉 {{ decrypted }}</p>
-    <p>⏱ {{ time_taken }} seconds</p>
-    <form method="post" action="/save_score">
-        <input name="name" placeholder="Your name" required>
-        <button>SUBMIT SCORE</button>
-    </form>
+        <p class="success">🎉 {{ decrypted }}</p>
+        <p>⏱ {{ time_taken }} seconds</p>
+        <form method="post" action="/save_score">
+            <input name="name" placeholder="Your name" required>
+            <button>SUBMIT SCORE</button>
+        </form>
     {% endif %}
 
-    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
 </div>
+
+<script>
+    // Removed leave-page warning entirely
+</script>
+
 </body>
 </html>

@@ -6,13 +6,38 @@
 </head>
 <body>
 <div class="container">
-    <div id="timer">⏳ 60s</div>
-    <div class="progress"><div class="progress-bar" style="--progress:75%"></div></div>
+    <!-- Timer and diamonds display -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="timer">⏳ 60s</div>
+        <div id="diamonds">💎 50</div>
+    </div>
 
-    <form method="post">
+    <div class="progress">
+        <div class="progress-bar" style="--progress:75%"></div>
+    </div>
+
+    <!-- Stage 3 form -->
+    <form method="post" id="encryptForm">
         <input name="message" placeholder="Secret Message" required><br>
-        <button>ENCRYPT</button>
+        <button type="submit">ENCRYPT</button>
     </form>
 </div>
+
+<script>
+/* ---------------- Leave confirmation ---------------- */
+let allowLeave = false;
+const form = document.getElementById('encryptForm');
+
+form.addEventListener('submit', () => {
+    allowLeave = true; // allow form submission without confirmation
+});
+
+window.onbeforeunload = function() {
+    if (!allowLeave) {
+        return "Are you sure you want to leave? Diamonds will reset!";
+    }
+};
+</script>
+
 </body>
 </html>
