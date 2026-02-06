@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/game.js"></script>
+    <script src="/static/sound.js"></script>
 
     <style>
         #diamonds {
@@ -24,31 +26,43 @@
 </head>
 
 <body>
-<div class="container">
-    <!-- Timer and diamonds display -->
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div id="timer">⏳ 60s</div>
-        <div id="diamonds">💎 50</div>
-        <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
+    <div class="container">
+        <!-- Timer and diamonds display -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div id="timer">⏰ 60s</div>
+            <div id="diamonds">🪙 50</div>
+            <button id="homeBtn" onclick="confirmBackToHome()">🏠 Home</button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="--progress:50%"></div>
+        </div>
+
+        <div
+            style="background: rgba(76, 175, 80, 0.15); border: 3px solid #4CAF50; border-radius: 12px; padding: 16px; margin: 20px auto; max-width: 600px;">
+            <h4 style="color: #E52521; margin: 8px 0; font-size: 16px;">🔧 Challenge 2: Key Generation 🔧</h4>
+            <p style="font-size: 14px; margin: 10px 0; line-height: 1.6;">
+                <strong>Step 1:</strong> Game computed n = p × q<br>
+                <strong>Step 2:</strong> Game computed φ(n) = (p-1)(q-1)<br>
+                <strong>Step 3:</strong> Choose your <strong>public key exponent (e)</strong><br>
+                <em style="font-size: 12px;">The private key (d) will be calculated automatically!</em>
+            </p>
+        </div>
+
+        <p>n = p*q = {{ n }}</p>
+        <p>φ(n) = (p-1)(q-1) = {{ phi }}</p>
+
+        <form method="post">
+            <label>🔧 Select public key (e):</label><br>
+            <select name="e">
+                {% for e in valid_e %}
+                <option value="{{ e }}">{{ e }}</option>
+                {% endfor %}
+            </select><br><br>
+            <button type="submit">POWER UP!</button>
+        </form>
     </div>
-
-    <div class="progress">
-        <div class="progress-bar" style="--progress:50%"></div>
-    </div>
-
-    <p>n = p*q = {{ n }}</p>
-    <p>φ(n) = (p-1)(q-1) = {{ phi }}</p>
-
-    <form method="post">
-        <label>Please pick any of e numbers:</label><br>
-        <select name="e">
-            {% for e in valid_e %}
-            <option value="{{ e }}">{{ e }}</option>
-            {% endfor %}
-        </select><br><br>
-        <button type="submit">FORGE KEYS</button>
-    </form>
-</div>
 
 </body>
+
 </html>
