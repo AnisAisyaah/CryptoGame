@@ -120,8 +120,9 @@ def stage4():
 def save_score():
     name = request.form["name"]
     time_taken = session["final_time"]
+    diamonds = int(request.form.get("diamonds", 50))  # Get diamonds from form
     leaderboard = load_leaderboard()
-    leaderboard.append({"name": name, "time": time_taken})
+    leaderboard.append({"name": name, "time": time_taken, "diamonds": diamonds})
     leaderboard = sorted(leaderboard, key=lambda x: x["time"])[:10]  # Keep top 10
     save_leaderboard(leaderboard)
     return redirect("/leaderboard")

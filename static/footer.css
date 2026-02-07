@@ -1,0 +1,25 @@
+/* Footer - Copyright */
+footer {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    border-top: 3px solid #ffd700;
+    border-radius: 8px;
+    font-size: 9px;
+    color: #ffd700;
+    text-align: center;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 9px;
+}
+
+/* Music control button */
+#musicBtn {
+    font-size: 18px;
+    padding: 5px 10px;
+    background: transparent;
+    border: 2px solid #00ff00;
+    margin-left: 10px;
+}

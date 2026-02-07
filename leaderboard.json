@@ -1,42 +1,12 @@
 [
     {
-        "name": "sixseven",
-        "time": 14.15
+        "name": "Aniss",
+        "time": 13.95,
+        "diamonds": 50
     },
     {
-        "name": "capina",
-        "time": 14.42
-    },
-    {
-        "name": "capina",
-        "time": 15.48
-    },
-    {
-        "name": "pwincess",
-        "time": 18.06
-    },
-    {
-        "name": "capina",
-        "time": 18.41
-    },
-    {
-        "name": "Munirah",
-        "time": 21.66
-    },
-    {
-        "name": "ninis",
-        "time": 22.69
-    },
-    {
-        "name": "slayy",
-        "time": 23.21
-    },
-    {
-        "name": "capina",
-        "time": 23.48
-    },
-    {
-        "name": "test",
-        "time": 27.26
+        "name": "Shaff",
+        "time": 41.09,
+        "diamonds": 40
     }
 ]
